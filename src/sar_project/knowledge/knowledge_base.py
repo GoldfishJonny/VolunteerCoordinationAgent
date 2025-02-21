@@ -4,91 +4,94 @@ class KnowledgeBase:
         Initializes the knowledge base with empty datasets for terrain, weather,
         resources, and mission history.
         """
-        self.terrain_data = {}
-        self.weather_data = {}
-        self.resource_status = {}
-        self.mission_history = []
-
-    def update_terrain(self, location, data):
+        self.volunteers = {}  # Stores volunteer data
+    
+    def add_volunteer(self, volunteer_id, name, contact_info, skills, availability, location, health_status, task_preferences, satisfaction_scores):
         """
-        Updates terrain data for a specific location.
+        Adds a volunteer to the knowledge base with detailed information.
 
         Args:
-            location (str): Name or identifier of the location.
-            data (dict): Terrain-related data (e.g., elevation, obstacles).
+            volunteer_id (str): Unique identifier for the volunteer.
+            name (str): Full name of the volunteer.
+            contact_info (dict): Contact details such as email and phone number.
+            skills (list): List of skills the volunteer possesses.
+            availability (dict): Availability schedule (e.g., days and hours available).
+            location (str): Geographic location of the volunteer.
+            health_status (str): Health and fitness status of the volunteer.
+            task_preferences (list): List of tasks the volunteer prefers.
+            satisfaction_scores (dict): Feedback or satisfaction ratings from previous tasks.
         """
-        self.terrain_data[location] = data
-
-    def update_weather(self, location, conditions):
+        self.volunteers[volunteer_id] = {
+            "name": name,
+            "contact_info": contact_info,
+            "skills": skills,
+            "availability": availability,
+            "location": location,
+            "health_status": health_status,
+            "task_preferences": task_preferences,
+            "satisfaction_scores": satisfaction_scores,
+            "assigned_tasks": []
+        }
+      
+    def create_roster(self, required_skills):
         """
-        Updates weather data for a specific location.
-
-        Args:
-            location (str): Name or identifier of the location.
-            conditions (dict): Weather conditions (e.g., temperature, wind speed).
-        """
-        self.weather_data[location] = conditions
-
-    def update_resource_status(self, resource_name, status):
-        """
-        Updates the status of a resource.
-
-        Args:
-            resource_name (str): Name of the resource (e.g., drone, vehicle).
-            status (dict): Resource status (e.g., availability, location).
-        """
-        self.resource_status[resource_name] = status
-
-    def log_mission_event(self, event):
-        """
-        Logs an event in the mission history.
+        Creates a roster of volunteers who match the required skills and are available.
 
         Args:
-            event (dict): Event details (e.g., timestamp, action, outcome).
-        """
-        self.mission_history.append(event)
-
-    def query_terrain(self, location):
-        """
-        Retrieves terrain data for a specific location.
-
-        Args:
-            location (str): Name or identifier of the location.
+            required_skills (list): List of skills needed for a task.
 
         Returns:
-            dict: Terrain-related data or an empty dictionary if not found.
+            list: A list of volunteers available for task assignments.
         """
-        return self.terrain_data.get(location, {})
-
-    def query_weather(self, location):
+        available_volunteers = []
+        for volunteer_id, volunteer_data in self.volunteers.items():
+            if all(skill in volunteer_data["skills"] for skill in required_skills) and any(volunteer_data["availability"].values()):
+                available_volunteers.append(volunteer_id)
+        return available_volunteers
+    
+    def assign_task(self, volunteer_id, task_details):
         """
-        Retrieves weather data for a specific location.
+        Assigns a task to a volunteer if they are available.
 
         Args:
-            location (str): Name or identifier of the location.
+            volunteer_id (str): The volunteer to assign.
+            task_details (dict): Task description, location, etc.
 
         Returns:
-            dict: Weather-related data or an empty dictionary if not found.
+            str: Confirmation message.
         """
-        return self.weather_data.get(location, {})
+        if volunteer_id not in self.volunteers:
+            return f"Volunteer {volunteer_id} not found."
 
-    def query_resource_status(self, resource_name):
+        volunteer = self.volunteers[volunteer_id]
+
+        # Check if volunteer is already assigned a task
+        if volunteer["assigned_tasks"]:
+            return f"{volunteer['name']} is already assigned a task."
+
+        # Assign the task
+        task_id = f"task_{len(volunteer['assigned_tasks']) + 1}"
+        volunteer["assigned_tasks"].append(task_details)
+
+        return f"Assigned task to {volunteer['name']}: {task_details['description']}"
+        
+    def complete_task(self, volunteer_id):
         """
-        Retrieves the status of a resource.
+        Marks the volunteer's active task as complete.
 
         Args:
-            resource_name (str): Name of the resource.
+            volunteer_id (str): The volunteer who completed their task.
 
         Returns:
-            dict: Resource status or an empty dictionary if not found.
+            str: Confirmation message.
         """
-        return self.resource_status.get(resource_name, {})
+        if volunteer_id not in self.volunteers:
+            return f"Volunteer {volunteer_id} not found."
 
-    def get_mission_history(self):
-        """
-        Retrieves the complete mission history.
+        volunteer = self.volunteers[volunteer_id]
 
-        Returns:
-            list: A list of logged mission events.
-        """
-        return self.mission_history
+        if not volunteer["assigned_tasks"]:
+            return f"{volunteer['name']} has no active tasks."
+
+        completed_task = volunteer["assigned_tasks"].pop(0)
+        return f"{volunteer['name']} completed task: {completed_task['description']}"
