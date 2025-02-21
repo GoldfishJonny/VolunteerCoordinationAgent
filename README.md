@@ -1,124 +1,85 @@
-# Search and Rescue (SAR) Agent Framework - CSC 581
+# SAR Volunteer Coordination Agent
 
-## Introduction
+## Overview
+The **SAR Volunteer Coordination Agent** is designed to manage volunteer resources in Search and Rescue (SAR) operations. It utilizes a **Knowledge Base** to maintain volunteer data, create rosters based on required skills, assign tasks, and track volunteer availability.
 
-This framework is for CSC 581 students to develop intelligent agents supporting the AI4S&R project. Students can create specialized agents for various SAR roles such as those listed in this spreadsheet:
+## Features
+- **Volunteer Management**: Add and store volunteer details, including skills, availability, and task preferences.
+- **Roster Generation**: Create lists of available volunteers matching required skills.
+- **Task Assignment**: Assign tasks to volunteers based on their availability.
+- **Status Tracking**: Update and retrieve the mission status of the volunteer coordination agent.
 
-https://docs.google.com/spreadsheets/d/1QZK5HAdDC-_XNui6S0JZTbJH5_PbYJTp8_gyhXmz8Ek/edit?usp=sharing
-https://docs.google.com/spreadsheets/d/11rBV9CbKNeQbWbaks8TF6GO7WcSUDS_-hAoH75UEkgQ/edit?usp=sharing
+## Components
 
-Each student or team will choose a specific role within the SAR ecosystem and implement an agent that provides decision support and automation for that role.
+### 1. KnowledgeBase Class
+The `KnowledgeBase` stores volunteer data and provides functions to:
+- **Add Volunteers**: Store contact info, skills, availability, and task preferences.
+- **Create Rosters**: Generate lists of available volunteers based on required skills.
+- **Assign Tasks**: Allocate tasks to volunteers if they are available.
+- **Complete Tasks**: Mark tasks as completed when volunteers finish assignments.
 
-## How to Submit
-Please submit a link to your clone of the repository to Canvas. 
+### 2. VolunteerCoordinatorAgent Class
+The `VolunteerCoordinatorAgent` extends `SARBaseAgent` and handles volunteer coordination tasks:
+- **Processes Requests**: Handles messages to create rosters, add volunteers, and retrieve volunteer information.
+- **Manages Knowledge Base**: Uses `KnowledgeBase` to store and retrieve data.
+- **Tracks Status**: Updates and retrieves the mission status of the agent.
 
-## Prerequisites
-
-- Python 3.8 or higher
-- pyenv (recommended for Python version management)
-- pip (for dependency management)
-
-## Setup and Installation
-
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd sar-project
-```
-
-2. Set up Python environment:
-```bash
-# Using pyenv (recommended)
-pyenv install 3.9.6  # or your preferred version
-pyenv local 3.9.6
-
-# Create and activate virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Unix/macOS
-# or
-.venv\Scripts\activate     # On Windows
-```
-
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-pip install -e .
-```
-
-4. Configure environment variables:
-
-#### OpenAI:
-- Obtain required API keys:
-  1. OpenAI API key: Sign up at https://platform.openai.com/signup
-- Update your `.env` file with the following:
+## Usage
+1. **Initialize the Agent**:
+    ```python
+    from sar_project.agents.volunteer_coordinator_agent import VolunteerCoordinatorAgent
+    agent = VolunteerCoordinatorAgent()
     ```
-    OPENAI_API_KEY=your_openai_api_key_here
+
+2. **Add a Volunteer**:
+    ```python
+    message = {
+        "action": "add_volunteer",
+        "volunteer_data": {
+            "volunteer_id": "vol1",
+            "name": "John Doe",
+            "contact_info": {"email": "johndoe@example.com", "phone": "123-456-7890"},
+            "skills": ["First Aid", "CPR"],
+            "availability": {"Mon": True, "Tue": False},
+            "location": "City A",
+            "health_status": "Good",
+            "task_preferences": ["Medical Support"],
+            "satisfaction_scores": {"task1": 5, "task2": 4}
+        }
+    }
+    agent.process_request(message)
     ```
-#### Google Gemini:
-- Obtain required API keys:
-  1. ``` pip install google-generativeai ```
-  2. ``` import google.generativeai as genai ```
-  3. Google Gemini API Key: Obtain at https://aistudio.google.com/apikey
-- Configure with the following:
-  ```
-  genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-  ```
 
-Make sure to keep your `.env` file private and never commit it to version control.
+3. **Create a Roster**:
+    ```python
+    roster = agent.process_request({"action": "create_roster", "required_skills": ["First Aid"]})
+    print(roster)
+    ```
 
-## Project Structure
+4. **Retrieve Volunteer Information**:
+    ```python
+    volunteer_info = agent.process_request({"action": "get_volunteer_info", "volunteer_id": "vol1"})
+    print(volunteer_info)
+    ```
 
+## Testing
+The functionality of the **VolunteerCoordinatorAgent** is tested using `pytest`:
+
+- **Test Initialization**: Ensures agent properties are correctly set.
+- **Test Adding Volunteers**: Verifies if volunteer data is stored correctly.
+- **Test Roster Creation**: Ensures volunteers are properly selected based on required skills.
+
+### Run Tests
+To execute tests, run:
+```bash
+pytest tests/
 ```
-sar-project/
-├── src/
-│   └── sar_project/         # Main package directory
-│       └── agents/          # Agent implementations
-│       └── config/          # Configuration and settings
-│       └── knowledge/       # Knowledge base implementations
-├── tests/                   # Test directory
-├── pyproject.toml           # Project metadata and build configuration
-├── requirements.txt         # Project dependencies
-└── .env                     # Environment configuration
-```
 
-## Development
+## Future Enhancements
+- **Automated Task Scheduling**: Improve task assignments based on real-time availability.
+- **Volunteer Feedback System**: Implement a system for volunteers to provide feedback on task experiences.
+- **Integration with External Databases**: Sync volunteer data with external sources for real-time updates.
 
-This project follows modern Python development practices:
+---
+This agent streamlines SAR volunteer coordination, ensuring efficient resource management and task allocation.
 
-1. Source code is organized in the `src/sar_project` layout
-2. Use `pip install -e .` for development installation
-3. Run tests with `pytest tests/`
-4. Follow the existing code style and structure
-5. Make sure to update requirements.txt when adding dependencies
-
-
-## FAQ
-
-### Assignment Questions
-
-**Q: How do I choose a role for my agent?**
-
-**A:** Review the list of SAR roles above and consider which aspects interest you most. Your agent should provide clear value to SAR operations through automation, decision support, or information processing.
-
-**Q: What capabilities should my agent have?**
-
-**A:** Your agent should handle tasks relevant to its role such as: data processing, decision making, communication with other agents, and providing actionable information to human operators.
-
-**Q: Can I add new dependencies?**
-
-**A:** Yes, you can add new Python packages to requirements.txt as needed for your implementation.
-
-
-### Technical Questions
-
-**Q: Why am I getting API key errors?**
-
-**A:** Ensure you've properly set up your .env file and obtained valid API keys from the services listed above.
-
-**Q: How do I test my agent?**
-
-**A:** Use the provided test framework in the tests/ directory. Write tests that verify your agent's core functionality.
-
-**Q: Can I use external libraries for my agent?**
-
-**A:** Yes, you can use external libraries as long as they are compatible.
