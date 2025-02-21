@@ -24,6 +24,10 @@ The `VolunteerCoordinatorAgent` extends `SARBaseAgent` and handles volunteer coo
 - **Manages Knowledge Base**: Uses `KnowledgeBase` to store and retrieve data.
 - **Tracks Status**: Updates and retrieves the mission status of the agent.
 
+## Limitations
+- **Lack of Error Checking**: The current implementation does not rigorously check whether tasks are already assigned or completed before making updates. Future improvements should introduce better validation mechanisms to prevent task duplication or conflicts.
+- **Limited Exception Handling**: There are minimal safeguards in place for handling unexpected input or missing data.
+
 ## Usage
 1. **Initialize the Agent**:
     ```python
