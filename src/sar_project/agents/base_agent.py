@@ -24,7 +24,7 @@ class SARBaseAgent(AssistantAgent):
         load_dotenv()
         return [{
             # "model": "gpt-4",
-            # "api_key": os.getenv("OPENAI_API_KEY"),
+            "api_key": "fds",
             "deployment_name": os.getenv("DEPLOYMENT_NAME")
         }]
 

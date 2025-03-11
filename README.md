@@ -4,19 +4,24 @@
 The **SAR Volunteer Coordination Agent** is designed to manage volunteer resources in Search and Rescue (SAR) operations. It utilizes a **Knowledge Base** to maintain volunteer data, create rosters based on required skills, assign tasks, and track volunteer availability.
 
 ## Features
-- **Volunteer Management**: Add and store volunteer details, including skills, availability, and task preferences.
-- **Roster Generation**: Create lists of available volunteers matching required skills.
-- **Task Assignment**: Assign tasks to volunteers based on their availability.
+- **Volunteer Management**: Add and store volunteer details, including skills, availability, task preferences, and hours worked.
+- **Roster Generation**: Create lists of available volunteers based on required skills.
+- **Task Assignment**: Assign tasks to volunteers based on their availability and skillset.
 - **Status Tracking**: Update and retrieve the mission status of the volunteer coordination agent.
+- **Volunteer Hours Tracking**: Track volunteer hours worked and generate reports based on that data.
+- **Data Updates**: Update volunteer details, such as skills, availability, and task preferences.
 
 ## Components
 
 ### 1. KnowledgeBase Class
 The `KnowledgeBase` stores volunteer data and provides functions to:
-- **Add Volunteers**: Store contact info, skills, availability, and task preferences.
+- **Add Volunteers**: Store contact info, skills, availability, task preferences, and hours worked.
+- **Update Volunteer Information**: Update existing volunteer details such as skills, availability, and task preferences.
 - **Create Rosters**: Generate lists of available volunteers based on required skills.
 - **Assign Tasks**: Allocate tasks to volunteers if they are available.
 - **Complete Tasks**: Mark tasks as completed when volunteers finish assignments.
+- **Track Hours Worked**: Track and store the number of hours worked by each volunteer.
+- **Generate Reports**: Generate reports of volunteers and their hours worked.
 
 ### 2. VolunteerCoordinatorAgent Class
 The `VolunteerCoordinatorAgent` extends `SARBaseAgent` and handles volunteer coordination tasks:
@@ -25,8 +30,8 @@ The `VolunteerCoordinatorAgent` extends `SARBaseAgent` and handles volunteer coo
 - **Tracks Status**: Updates and retrieves the mission status of the agent.
 
 ## Limitations
-- **Lack of Error Checking**: The current implementation does not rigorously check whether tasks are already assigned or completed before making updates. Future improvements should introduce better validation mechanisms to prevent task duplication or conflicts.
-- **Limited Exception Handling**: There are minimal safeguards in place for handling unexpected input or missing data.
+- **Lack of Validation**: The current implementation does not rigorously check for task duplication or conflicts when assigning tasks. Future improvements should introduce better validation mechanisms.
+- **Minimal Exception Handling**: There are minimal safeguards for handling unexpected input or missing data.
 
 ## Usage
 1. **Initialize the Agent**:
@@ -69,20 +74,19 @@ The `VolunteerCoordinatorAgent` extends `SARBaseAgent` and handles volunteer coo
 ## Testing
 The functionality of the **VolunteerCoordinatorAgent** is tested using `pytest`:
 
+
 - **Test Initialization**: Ensures agent properties are correctly set.
 - **Test Adding Volunteers**: Verifies if volunteer data is stored correctly.
+- **Test Updating Volunteers**: Verifies if volunteer data can be updated successfully.
 - **Test Roster Creation**: Ensures volunteers are properly selected based on required skills.
+- **Test Report Generation**: Verifies volunteer hours are tracked and reports are generated correctly.
+
 
 ### Run Tests
 To execute tests, run:
 ```bash
 pytest tests/
 ```
-
-## Future Enhancements
-- **Automated Task Scheduling**: Improve task assignments based on real-time availability.
-- **Volunteer Feedback System**: Implement a system for volunteers to provide feedback on task experiences.
-- **Integration with External Databases**: Sync volunteer data with external sources for real-time updates.
 
 ---
 This agent streamlines SAR volunteer coordination, ensuring efficient resource management and task allocation.

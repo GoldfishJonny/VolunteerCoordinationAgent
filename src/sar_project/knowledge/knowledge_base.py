@@ -6,7 +6,7 @@ class KnowledgeBase:
         """
         self.volunteers = {}  # Stores volunteer data
     
-    def add_volunteer(self, volunteer_id, name, contact_info, skills, availability, location, health_status, task_preferences, satisfaction_scores):
+    def add_volunteer(self, volunteer_id, name, contact_info, skills, availability, location, health_status, task_preferences, satisfaction_scores, hours_worked=0):
         """
         Adds a volunteer to the knowledge base with detailed information.
 
@@ -30,7 +30,8 @@ class KnowledgeBase:
             "health_status": health_status,
             "task_preferences": task_preferences,
             "satisfaction_scores": satisfaction_scores,
-            "assigned_tasks": []
+            "assigned_tasks": [],
+            "hours_worked": hours_worked
         }
       
     def create_roster(self, required_skills):

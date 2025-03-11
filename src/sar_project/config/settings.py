@@ -1,21 +1,21 @@
 import os
 from dotenv import load_dotenv
-import google.generativeai as genai
+# import google.generativeai as genai
 # Load environment variables from .env file
 load_dotenv()
 
 # API keys
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
+OPENAI_API_KEY =  "h"
+# WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 
 # Deployment settings
 DEPLOYMENT_NAME = os.getenv("DEPLOYMENT_NAME", "default_deployment")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 # Agent configuration
-DEFAULT_MODEL = "gpt-4"
-DEFAULT_TEMPERATURE = 0.7
-DEFAULT_TIMEOUT = 600
+# DEFAULT_MODEL = "gpt-4"
+# DEFAULT_TEMPERATURE = 0.7
+# DEFAULT_TIMEOUT = 600
 
 # File paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
